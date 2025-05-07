@@ -18,14 +18,13 @@ function Authentication() {
             </div>
 
             <Routes>
-              <Route path="/" element={<Login/>}></Route>
+            <Route path="/" element={<Login/>}></Route>
               <Route path="/login" element={<Login/>}></Route>
               <Route path="/register" element={<Register/>}></Route>
+              
             </Routes>
 
-           
-
-          {/* <Register/> */}
+      
           
         </Card>
         </Grid>

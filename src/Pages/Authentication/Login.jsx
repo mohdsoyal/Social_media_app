@@ -4,6 +4,7 @@ import { TextField } from '@mui/material';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { loginUserAction } from "../../Auth/Auth.Action";
+import { useNavigate } from 'react-router-dom';
 
 
 const initialValues = {email: "",password: ""};
@@ -20,6 +21,8 @@ const validationSchema = Yup.object({
 function Login() {
   const [formValue, setFormValue] = useState();
   const dispatch=useDispatch();
+
+  const navigate=useNavigate();
 
 
   const handleSubmit = (values) => {
@@ -66,6 +69,10 @@ function Login() {
           </Form>
         )}
       </Formik>
+
+      <div className='flex gap-5 justify-center mt-2'><p>if you don't have account ?</p>
+      <button onClick={()=>navigate("/register")}>Register</button>
+      </div>
     </>
   );
 }

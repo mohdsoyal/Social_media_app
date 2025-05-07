@@ -14,6 +14,7 @@ import {
   RadioGroup,
 } from '@mui/material';
 import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
 
 const initialValues = {
   firstName: '',
@@ -36,13 +37,15 @@ const validationSchema = Yup.object({
 function Register() {
 
   const dispatch=useDispatch();
+  const navigate=useNavigate();
 
   const handleSubmit = (values) => {
-    console.log('handle Login', values);
+    console.log('handle Register', values);
     dispatch(registerUserAction({data:values}))
   };
 
   return (
+    <>
     <Formik
       onSubmit={handleSubmit}
       validationSchema={validationSchema}
@@ -114,6 +117,12 @@ function Register() {
         </Form>
       )}
     </Formik>
+
+    <div className='flex gap-5 justify-center mt-2'><p>if you have already account ?</p>
+      <button onClick={()=>navigate("/login")}>Login</button>
+      </div>
+    </>
+    
   );
 }
 
