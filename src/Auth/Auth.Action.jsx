@@ -160,3 +160,15 @@ export const getProfileAction = (jwt) => async (dispatch) => {
         dispatch({ type: GET_PROFILE_FAILURE, payload: error.message });
     }
 };
+
+
+
+//Logout
+
+// Add this function
+export const logoutAction = () => (dispatch) => {
+    localStorage.removeItem("jwt"); // Remove token from localStorage
+  
+    dispatch({ type: "LOGOUT_USER" }); // Dispatch logout action
+  };
+  

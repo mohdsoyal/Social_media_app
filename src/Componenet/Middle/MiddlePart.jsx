@@ -27,7 +27,7 @@ function MiddlePart() {
 
   useEffect(() => {
     dispatch(getAllPostAction());
-  }, []); // ✅ Fixed missing dependency array
+  }, [post.createComment]); 
 
   return (
     <div className="px-20">

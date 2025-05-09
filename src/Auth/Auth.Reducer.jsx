@@ -62,6 +62,7 @@ const initialState = {
     error: null,
     loading: false,
     user: null,
+    
 };
 
 export const authReducer = (state = initialState, action) => {
@@ -89,6 +90,16 @@ export const authReducer = (state = initialState, action) => {
         // Get Profile Failure
         case GET_PROFILE_FAILURE:
             return { ...state, loading: false, error: action.payload };
+
+            case "LOGOUT_USER":
+                return {
+                  ...state,
+                  jwt: null,
+                  user: null,
+                  error: null,
+                  loading: false,
+                };
+                  
 
         default:
             return state;

@@ -119,8 +119,10 @@ import ShareIcon from '@mui/icons-material/Share';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
-import { useDispatch } from 'react-redux';
-import { createCommentAction } from './Post.Action';
+import { useDispatch, useSelector } from 'react-redux';
+import { createCommentAction, likePostAction } from './Post.Action';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { isLikedByReqUser } from '../../Utils/isLikedReqUser';
 
 function PostCard({ item }) {
   if (!item || !item.user) return null; // Prevent runtime errors
@@ -128,6 +130,7 @@ function PostCard({ item }) {
 
   const handleShowComment=()=>setShowComments(!showComments);
   const dispatch=useDispatch();
+  const {post,auth}=useSelector(store=>store);
 
   const handleCreateComment = (content) => {
     const reqData = {
@@ -137,6 +140,10 @@ function PostCard({ item }) {
   
     dispatch(createCommentAction(reqData));
   };
+
+  const handleLikePost=()=>{
+    dispatch(likePostAction(item.id))
+  }
   
 
   return (
@@ -169,15 +176,17 @@ function PostCard({ item }) {
         </Typography>
       </CardContent>
 
+      
       <CardActions className="flex justify-between" disableSpacing>
         <div>
-          <IconButton>
-            <FavoriteIcon />
+
+          <IconButton onClick={handleLikePost}>
+            {isLikedByReqUser(auth.user.id, item)?<FavoriteIcon  sx={{ color: 'red' }} />:<FavoriteBorderIcon/>}
           </IconButton>
+
           <IconButton>
             <ShareIcon />
           </IconButton>
-
           <IconButton onClick={handleShowComment}>
             <ChatBubbleIcon />
           </IconButton>
@@ -201,7 +210,7 @@ function PostCard({ item }) {
        </div>
        <Divider/>
 
-       {item.comments.map((comment)=> <div className='mx-3 space-y-2 my-5 text-xs'>
+       {item.comments?.map((comment)=> <div className='mx-3 space-y-2 my-5 text-xs'>
       
           <div className='flex items-center space-x-5 '>
             <Avatar sx={{height:"2rem",width:"2rem",fontSize:".8rem"}}>{comment.user.firstName[0]}</Avatar>

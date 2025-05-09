@@ -1,5 +1,6 @@
 import { api } from "../../Config/Api";
 import {
+  
   CREATE_COMMENT_FAILURE,
   CREATE_COMMENT_REQUEST,
   CREATE_COMMENT_SUCCESS,
@@ -69,7 +70,9 @@ export const getUsersPostAction = (userId) => async (dispatch) => {
 export const likePostAction = (postId) => async (dispatch) => {
   dispatch({ type: LIKE_POST_REQUEST });
   try {
-    const { data } = await api.get(`/api/posts/like/${postId}`);
+    const { data } = await api.put(`/api/posts/like/${postId}`);
+    console.log("Post liked successfully:", data); 
+
     dispatch({ type: LIKE_POST_SUCCESS, payload: data });
   } catch (error) {
     console.log("Error liking post:", error.response?.data || error.message);
@@ -113,3 +116,20 @@ export const createCommentAction = ({ postId, content }) => async (dispatch) => 
     });
   }
 };
+
+
+// export const createCommentAction = (postData) => async (dispatch) => {
+//   dispatch({ type: CREATE_COMMENT_REQUEST });
+
+//   try {
+//     const { data } = await api.post("/api/posts", postData);
+//     dispatch({ type: CREATE_COMMENT_SUCCESS, payload: data });
+//     console.log("Created Comments", data);
+//   } catch (error) {
+//     console.log("Error creating Comments:", error.response?.data || error.message);
+//     dispatch({
+//       type: CREATE_COMMENT_FAILURE,
+//       payload: error.response?.data || error.message,
+//     });
+//   }
+// };

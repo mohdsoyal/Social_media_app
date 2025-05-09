@@ -20,7 +20,8 @@ import {
     like: null,
     loading: false,
     error: null,
-    comments:[]
+    comments:[],
+    createComment: null,
   };
   
   export const postReducer = (state = initialState, action) => {
@@ -63,7 +64,9 @@ import {
       
       case CREATE_COMMENT_SUCCESS:
         return{
-          ...state,comments:[action.payload,...state.comments],
+          ...state,
+          createComment:action.payload,
+         // comments:[action.payload,...state.comments],
           loading:false,
           error:null
         }  

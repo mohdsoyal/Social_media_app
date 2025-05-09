@@ -8,7 +8,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import DuoIcon from '@mui/icons-material/Duo';
 import { uploadToCloudinary } from '../../Utils/UploadToCloudniry';
 import { useDispatch } from 'react-redux';
-import { createCommentAction, createPostAction } from '../Post/Post.Action';
+import { createPostAction } from '../Post/Post.Action';
 
 const style = {
   position: 'absolute',
