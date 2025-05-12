@@ -25,19 +25,12 @@ const style = {
 };
 
 function CreatePostModal({ handleClose, open }) {
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
- 
-  const [selectedImage, setSelectedImage] = useState();
-  const [selectedVideo, setSelectedVideo] = useState();
-  const [isLoading , setIsLoading]=useState(false);
-
-  const dispatch=useDispatch();
-
-
-  
-
-
-   const handleSelectImage = async (event) => {
+  const handleSelectImage = async (event) => {
     setIsLoading(true);
     const imageUrl = await uploadToCloudinary(event.target.files[0], "image");
     setSelectedImage(imageUrl);
@@ -47,26 +40,27 @@ function CreatePostModal({ handleClose, open }) {
 
   const handleSelectVideo = async (event) => {
     setIsLoading(true);
-    const videoUrl = await uploadToCloudinary(event.target.files[0],"video");
+    const videoUrl = await uploadToCloudinary(event.target.files[0], "video");
     setSelectedVideo(videoUrl);
     setIsLoading(false);
-    formik.setFieldValue("Video",videoUrl);
-    
+    formik.setFieldValue("video", videoUrl); // Note: use lowercase "video"
   };
 
-  const formik=useFormik({
-    initialValues:{
-        caption:"",
-        image:"",
-        video:""
+  const formik = useFormik({
+    initialValues: {
+      caption: "",
+      image: "",
+      video: ""
     },
-    onSubmit:(values)=>{
-        console.log("Formik Values", values)
-        dispatch(createPostAction(values))
+    onSubmit: (values) => {
+      dispatch(createPostAction(values));
+      formik.resetForm();
+      setSelectedImage(null);
+      setSelectedVideo(null);
+      handleClose();
     }
   });
 
- 
   return (
     <Modal
       open={open}
@@ -77,6 +71,7 @@ function CreatePostModal({ handleClose, open }) {
       <Box sx={style}>
         <form onSubmit={formik.handleSubmit}>
           <div className="space-y-4">
+            {/* User Info */}
             <div className="flex space-x-4 items-center">
               <Avatar />
               <div>
@@ -85,6 +80,7 @@ function CreatePostModal({ handleClose, open }) {
               </div>
             </div>
 
+            {/* Caption */}
             <textarea
               name="caption"
               rows="4"
@@ -94,7 +90,9 @@ function CreatePostModal({ handleClose, open }) {
               className="w-full border p-2 rounded"
             ></textarea>
 
+            {/* Image/Video Upload */}
             <div className="flex space-x-5 items-center">
+              {/* Image */}
               <div>
                 <input
                   type="file"
@@ -109,9 +107,9 @@ function CreatePostModal({ handleClose, open }) {
                   </IconButton>
                 </label>
                 <span>Image</span>
-
               </div>
 
+              {/* Video */}
               <div>
                 <input
                   type="file"
@@ -129,32 +127,39 @@ function CreatePostModal({ handleClose, open }) {
               </div>
             </div>
 
+            {/* Preview Image */}
             {selectedImage && (
-             <div>
-             <img className="h-[10rem]" src={selectedImage} alt="Uploaded preview" />
-             </div>
-             )}
+              <div>
+                <img className="h-[10rem]" src={selectedImage} alt="Uploaded preview" />
+              </div>
+            )}
 
+            {/* Preview Video */}
+            {selectedVideo && (
+              <div className="mt-4">
+                <video className="h-[10rem]" controls>
+                  <source src={selectedVideo} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            )}
 
-
+            {/* Submit */}
             <div className="flex justify-end mt-4">
               <Button type="submit" variant="contained" color="primary">
                 Post
               </Button>
             </div>
-
-          
-
           </div>
         </form>
-        <Backdrop
-  sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
-  open={isLoading}
-  onClick={handleClose}
->
-  <CircularProgress color="inherit" />
-</Backdrop>
 
+        {/* Loader Backdrop */}
+        <Backdrop
+          sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
+          open={isLoading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
       </Box>
     </Modal>
   );

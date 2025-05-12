@@ -163,12 +163,35 @@ function PostCard({ item }) {
         subheader={"@"+item.user.firstName.toLowerCase()+"_"+item.user.lastName.toLowerCase()}
       />
 
-      <CardMedia
+      {/* <CardMedia
         component="img"
         height="194"
         image={item.image}
         alt="Post image"
-      />
+      /> */}
+
+       {/* Image (if present) */}
+       {item.image && (
+        <img
+          src={item.image}
+          alt="Post"
+          style={{ width: '100%', maxHeight: 400, objectFit: 'cover' }}
+        />
+      )}
+
+      {/* Video (if present) */}
+      {item.video && (
+        <video
+          src={item.video}
+          controls
+          
+  
+          style={{ width: '100%', maxHeight: 400, objectFit: 'cover' }}
+        />
+      )}
+
+
+      
 
       <CardContent>
         <Typography variant="body2" color="text.secondary">
@@ -181,7 +204,7 @@ function PostCard({ item }) {
         <div>
 
           <IconButton onClick={handleLikePost}>
-            {isLikedByReqUser(auth.user.id, item)?<FavoriteIcon  sx={{ color: 'red' }} />:<FavoriteBorderIcon/>}
+            {isLikedByReqUser(auth.user.id, item)?<FavoriteIcon sx={{color:red[500]}}/>:<FavoriteBorderIcon/>}
           </IconButton>
 
           <IconButton>

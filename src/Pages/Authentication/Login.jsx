@@ -7,6 +7,7 @@ import { loginUserAction } from "../../Auth/Auth.Action";
 import { useNavigate } from 'react-router-dom';
 
 
+
 const initialValues = {email: "",password: ""};
 
 const validationSchema = Yup.object({
@@ -30,8 +31,14 @@ function Login() {
     dispatch(loginUserAction({data:values}))
   };
 
+  const img="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ691-jsTTXRAmd0xWO3ym75cRTlTRa1Dxcmg&s";
   return (
     <>
+     <div
+  className="justify-center bg-cover bg-center p-8"
+  style={{ backgroundImage: `url(${img})` }}
+>
+
       <Formik
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
@@ -73,8 +80,10 @@ function Login() {
       <div className='flex gap-5 justify-center mt-2'><p>if you don't have account ?</p>
       <button onClick={()=>navigate("/register")}>Register</button>
       </div>
+      </div>
     </>
   );
 }
 
 export default Login;
+   
