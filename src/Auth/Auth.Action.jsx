@@ -102,9 +102,12 @@ import {
     REGISTER_FAILURE,
     GET_PROFILE_REQUEST,
     GET_PROFILE_SUCCESS,
-    GET_PROFILE_FAILURE
+    GET_PROFILE_FAILURE,
+    SEARCH_USER_REQUEST,
+    SEARCH_USER_SUCCESS,
+    SEARCH_USER_FAILURE
 } from './Auth.ActionType';
-import { API_BASE_URL } from '../Config/Api';
+import { api, API_BASE_URL } from '../Config/Api';
 
 // Login User Action
 export const loginUserAction = (loginData) => async (dispatch) => {
@@ -171,4 +174,28 @@ export const logoutAction = () => (dispatch) => {
   
     dispatch({ type: "LOGOUT_USER" }); // Dispatch logout action
   };
+ 
   
+
+
+
+export const searchUser = (query) => async (dispatch) => {
+  dispatch({ type: SEARCH_USER_REQUEST });
+
+  try {
+    const jwt = localStorage.getItem("jwt");
+
+    const { data } = await axios.get(`http://localhost:6393/api/user/search/${encodeURIComponent(query)}`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+
+    console.log("search User..........Successfully", data);
+    dispatch({ type: SEARCH_USER_SUCCESS, payload: data });
+
+  } catch (error) {
+    console.log("Error ", error);
+    dispatch({ type: SEARCH_USER_FAILURE });
+  }
+};

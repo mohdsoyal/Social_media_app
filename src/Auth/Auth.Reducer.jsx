@@ -54,7 +54,8 @@ import {
     REGISTER_FAILURE,
     GET_PROFILE_REQUEST,
     GET_PROFILE_SUCCESS,
-    GET_PROFILE_FAILURE
+    GET_PROFILE_FAILURE,
+    SEARCH_USER_SUCCESS
 } from './Auth.ActionType';
 
 const initialState = {
@@ -62,6 +63,7 @@ const initialState = {
     error: null,
     loading: false,
     user: null,
+    searchUser:[]
     
 };
 
@@ -81,6 +83,9 @@ export const authReducer = (state = initialState, action) => {
         case LOGIN_SUCCESS:
         case REGISTER_SUCCESS:
             return { ...state, jwt: action.payload, loading: false, error: null };
+
+        case SEARCH_USER_SUCCESS:
+            return {...state, searchUser:action.payload,loading:false, error:null}    
 
         // Login & Register Failure
         case LOGIN_FAILURE:
