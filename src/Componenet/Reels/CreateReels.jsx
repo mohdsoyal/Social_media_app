@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { createReelAction } from './Reel.Action'; // Your action file
+import { createReelAction } from './Reel.Action';
+import { uploadToCloudinary } from '../../Utils/UploadToCloudniry';
+import { useNavigate } from 'react-router-dom';
 
 function CreateReels() {
   const [title, setTitle] = useState('');
   const [videoFile, setVideoFile] = useState(null);
   const [message, setMessage] = useState('');
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const token = localStorage.getItem('jwt'); // Retrieve token from localStorage
+    const token = localStorage.getItem('jwt');
     if (!token) {
       setMessage('You must be logged in to create a reel.');
       return;
@@ -22,13 +25,25 @@ function CreateReels() {
       return;
     }
 
-    // Create form data for video upload
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('video', videoFile);
+    try {
+      // Upload video to Cloudinary and get URL
+      const video = await uploadToCloudinary(videoFile, 'video');
+      if (!video) {
+        setMessage('Video upload failed');
+        return;
+      }
 
-    // Dispatch the action to create a reel
-    dispatch(createReelAction(formData, token));
+      // Dispatch create reel action with title and video URL as "video"
+      await dispatch(createReelAction({ title, video }, token));
+
+      setMessage('Reel created successfully!');
+      
+      // Redirect to home page after success
+      navigate('/Reels');
+    } catch (err) {
+      console.error(err);
+      setMessage('Something went wrong!');
+    }
   };
 
   return (

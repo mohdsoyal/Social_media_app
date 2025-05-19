@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Avatar, Grid, IconButton } from '@mui/material';
+import { Avatar, Backdrop, CircularProgress, Grid, IconButton } from '@mui/material';
 import WestIcon from '@mui/icons-material/West';
 import CallIcon from '@mui/icons-material/Call';
 import VideoCallIcon from '@mui/icons-material/VideoCall';
@@ -144,6 +144,7 @@ function Message() {
           {/* Input Box */}
           <div className="sticky bottom-0 bg-white">
             <div className="py-5 flex items-center justify-center space-x-5">
+             {selectedImage &&  <img className='w-[5rem] h-[5rem] object-cover px-2' src={selectedImage} alt="" srcset="" />}
               <input
                 onKeyPress={(e) => {
                   if (e.key === "Enter" && e.target.value.trim()) {
@@ -171,6 +172,14 @@ function Message() {
           </div>
         </Grid>
       </Grid>
+
+       <Backdrop
+        sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
+        open={loading}
+       
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </div>
   );
 }

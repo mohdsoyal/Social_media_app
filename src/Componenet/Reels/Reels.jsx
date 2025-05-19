@@ -1,33 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import UserReelsCard from './UserReelsCard';
+// src/pages/Reels.jsx
 
-function Reels() {
-  const [reels, setReels] = useState([]);
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllReelAction } from './Reel.Action';
+
+export default function Reels() {
+  const dispatch = useDispatch();
+
+  // ✅ Correct destructuring from state
+  const { reels = [], loading, error } = useSelector((state) => state.reels || {});
 
   useEffect(() => {
-    const fetchReels = async () => {
-      try {
-        const response = await axios.get('http://localhost:6393/api/reel');
-        setReels(response.data);
-      } catch (error) {
-        console.error('Error fetching reels:', error);
-      }
-    };
+    dispatch(getAllReelAction());
+  }, [dispatch]);
 
-    fetchReels();
-  }, []);
+  if (loading) return <p>Loading reels...</p>;
+  if (error) return <p style={{ color: 'red' }}>Error: {error}</p>;
+
+  // ✅ Only show reels that have a video URL
+  const videoReels = reels.filter((reel) => reel.video);
 
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">All Reels</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {reels.map((reel) => (
-          <UserReelsCard key={reel.id} reel={reel} />
-        ))}
-      </div>
+    <div>
+      {videoReels.length === 0 ? (
+        <p className='text-xl items-center text-bold'>No reels found.</p>
+      ) : (
+        videoReels.map((reel) => (
+          <div key={reel.id} style={{ marginBottom: "20px" }}>
+            <h3>{reel.title || "Untitled Reel"}</h3>
+            <video width="320" height="240" controls>
+              <source src={reel.video} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        ))
+      )}
     </div>
   );
 }
-
-export default Reels;

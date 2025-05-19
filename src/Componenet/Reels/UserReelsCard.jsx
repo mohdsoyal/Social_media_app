@@ -1,24 +1,22 @@
-// import React from 'react'
-
-// function UserReelsCard() {
-//   return (
-//     <div className='w-[15rem] px-2'>
-//         <video controls className='w-full h-full' src="https://videos.pexels.com/video-files/8041860/8041860-sd_506_960_25fps.mp4"/>
-//     </div>
-//   )
-// }
-
-// export default UserReelsCard
-
-
-import React from 'react';
-
 function UserReelsCard({ reel }) {
   return (
-    <div className="w-[15rem] px-2">
-      <h3 className="font-semibold text-xl">{reel.title}</h3>
-      <p>{reel.description}</p>
-      <video controls className="w-full h-[10rem]" src={reel.videoUrl} />
+    <div className="card p-4 border rounded shadow mb-4">
+      <h3 className="font-semibold text-lg mb-2">
+        {reel.title || "Untitled Reel"}
+      </h3>
+
+      {reel.video ? (
+        <video
+          controls
+          width="100%"
+          className="rounded"
+        >
+          <source src={reel.video} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      ) : (
+        <p className="text-gray-500">No video available</p>
+      )}
     </div>
   );
 }

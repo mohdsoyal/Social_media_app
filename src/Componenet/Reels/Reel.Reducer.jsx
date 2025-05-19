@@ -1,19 +1,20 @@
+import { REELS_REQUEST, REELS_SUCCESS, REELS_FAILURE } from "../Post/Post.ActionType";
+
 const initialState = {
-    loading: false,
-    reel: null,
-    error: null,
-  };
-  
-  export const reelReducer = (state = initialState, action) => {
-    switch (action.type) {
-      case 'CREATE_REEL_REQUEST':
-        return { ...state, loading: true };
-      case 'CREATE_REEL_SUCCESS':
-        return { loading: false, reel: action.payload, error: null };
-      case 'CREATE_REEL_FAILURE':
-        return { loading: false, reel: null, error: action.payload };
-      default:
-        return state;
-    }
-  };
-  
+  loading: false,
+  reels: [],
+  error: null,
+};
+
+export function reelsReducer(state = initialState, action) {
+  switch (action.type) {
+    case REELS_REQUEST:
+      return { ...state, loading: true, error: null };
+    case REELS_SUCCESS:
+      return { ...state, loading: false, reels: action.payload };
+    case REELS_FAILURE:
+      return { ...state, loading: false, error: action.payload };
+    default:
+      return state;
+  }
+}

@@ -23,6 +23,7 @@ export const createPostAction = (postData) => async (dispatch) => {
   dispatch({ type: CREATE_POST_REQUEST });
 
   try {
+    
     const { data } = await api.post("/api/posts", postData);  // Using Axios instance with interceptor
     dispatch({ type: CREATE_POST_SUCCESS, payload: data });
     console.log("Created Post", data);
